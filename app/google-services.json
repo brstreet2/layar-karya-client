@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "187452323893",
+    "project_id": "layarkarya-65957",
+    "storage_bucket": "layarkarya-65957.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187452323893:android:2a12029d3f5334c5e3997c",
+        "android_client_info": {
+          "package_name": "com.example.layarkarya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "187452323893-llb84el1tqjvea83sq1710ndlk1q9mjo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-l4A710ReGn5VVu4SWOamBCYNzGt5eYA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "187452323893-llb84el1tqjvea83sq1710ndlk1q9mjo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

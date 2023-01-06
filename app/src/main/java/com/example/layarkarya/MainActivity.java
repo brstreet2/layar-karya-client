@@ -46,8 +46,6 @@ public class MainActivity extends AppCompatActivity implements MoviesItemClickLi
     public RecyclerView MoviesRV, moviesRvWeek, tab;
     public ProgressDialog progressDialog;
 
-    public MovieUncatagorizedAdapter movieUncatagorizedAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

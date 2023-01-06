@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.layarkarya.Adapter.MovieShowAdapter;
@@ -45,6 +48,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements MoviesIte
         inView();
         similarMovieRecycler();
         similarMovie();
+
+        play_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MovieDetailsActivity.this, "Just click the Play Button!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MovieDetailsActivity.this, MoviePlayerActivity.class);
+                intent.putExtra("movieUri", currentMovieUrl);
+
+                startActivity(intent);
+            }
+        });
     }
 
     private void similarMovie() {

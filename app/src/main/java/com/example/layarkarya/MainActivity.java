@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.ActivityOptions;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -206,8 +207,16 @@ public class MainActivity extends AppCompatActivity implements MoviesItemClickLi
     }
 
     @Override
-    public void onMovieClick(MovieDetails movieDetails, ImageView imageView) {
-
+    public void onMovieClick(MovieDetails movie, ImageView imageView) {
+        Intent intent = new Intent(this, MovieDetailsActivity.class);
+        intent.putExtra("title", movie.getMovie_name());
+        intent.putExtra("imgURL", movie.getMovie_thumbnail());
+        intent.putExtra("movieDetails", movie.getMovie_description());
+        intent.putExtra("imgCover", movie.getMovie_thumbnail());
+        intent.putExtra("movieUrl", movie.getMovie_url());
+        intent.putExtra("movieCategory", movie.getMovie_category());
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, imageView, "sharedName");
+        startActivity(intent, options.toBundle());
     }
 
     public class SliderTimer extends TimerTask {

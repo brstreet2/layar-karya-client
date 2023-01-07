@@ -39,6 +39,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MoviesIte
 
     public String currentMovieUrl;
     public String currentMovieCategory;
+    public String movieName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MoviesIte
         play_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MovieDetailsActivity.this, "Just click the Play Button!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MovieDetailsActivity.this, "Now playing: " + movieName, Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(MovieDetailsActivity.this, MoviePlayerActivity.class);
                 intent.putExtra("movieUri", currentMovieUrl);
 
@@ -166,6 +167,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements MoviesIte
         String movieCategory = getIntent().getExtras().getString("movieCategory");
         currentMovieUrl = movieUrl;
         currentMovieCategory = movieCategory;
+        movieName = movieTitle;
         Glide.with(this).load(imgURL).into(movieThumbnail);
         Glide.with(this).load(imageCover).into(movieCoverImg);
         tvTitle.setText(movieTitle);

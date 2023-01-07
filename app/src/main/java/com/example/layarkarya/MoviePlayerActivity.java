@@ -1,32 +1,24 @@
 package com.example.layarkarya;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
-import com.example.layarkarya.Services.FloatingWidgetService;
-import com.zoyi.com.google.android.exoplayer2.ExoPlayer;
-import com.zoyi.com.google.android.exoplayer2.ExoPlayerFactory;
-import com.zoyi.com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.zoyi.com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.zoyi.com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.zoyi.com.google.android.exoplayer2.source.MediaSource;
-import com.zoyi.com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.zoyi.com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.zoyi.com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.zoyi.com.google.android.exoplayer2.ui.PlayerView;
-import com.zoyi.com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.zoyi.com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.zoyi.com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.zoyi.com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.ui.PlayerView;
 
 
 public class MoviePlayerActivity extends AppCompatActivity {
@@ -34,88 +26,123 @@ public class MoviePlayerActivity extends AppCompatActivity {
     public Uri movieUri;
     public PlayerView playerView;
     public ExoPlayer exoPlayer;
-    public ExtractorsFactory extractorsFactory;
-    public ImageView exo_floating_widget;
-    public View exoPlayback;
+    public ImageView bt_fullscreen;
+    public boolean isFullScreen = false;
+    public Handler handler;
+    public View exoController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setFullScreen();
         setContentView(R.layout.activity_movie_player);
-        hideActionBar();
-        playerView = findViewById(R.id.playerView);
-        exoPlayback = LayoutInflater.from(this).inflate(R.layout.exo_playback_control_view, null);
-        exo_floating_widget = (ImageView) exoPlayback.findViewById(R.id.exo_floating_widget);
+        handler = new Handler(Looper.getMainLooper());
+
+        playerView = findViewById(R.id.player);
+        ProgressBar progressBar = findViewById(R.id.progress_bar);
+        exoController = LayoutInflater.from(this).inflate(R.layout.custom_controller, null);
+        bt_fullscreen = (ImageView) exoController.findViewById(R.id.bt_fullscreen);
+
+        bt_fullscreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isFullScreen) {
+                    bt_fullscreen.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_fullscreen_exit));
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+                } else {
+                    bt_fullscreen.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_baseline_fullscreen));
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                }
+                isFullScreen = !isFullScreen;
+            }
+        });
+
+        exoPlayer = new ExoPlayer.Builder(this)
+                .setSeekBackIncrementMs(5000)
+                .setSeekForwardIncrementMs(5000)
+                .build();
+        playerView.setPlayer(exoPlayer);
+
+        playerView.setKeepScreenOn(true);
+
+        exoPlayer.addListener(new Player.Listener() {
+            @Override
+            public void onPlaybackStateChanged(int playbackState) {
+                if (playbackState == Player.STATE_BUFFERING) {
+                    progressBar.setVisibility(View.VISIBLE);
+                } else if (playbackState == Player.STATE_READY) {
+                    progressBar.setVisibility(View.GONE);
+                }
+
+                if (!exoPlayer.getPlayWhenReady()) {
+                    handler.removeCallbacks(updateProgressAction);
+                } else {
+                    onProgress();
+                }
+            }
+        });
 
         Intent intent = getIntent();
-
         if(intent != null ){
             String uri_str = intent.getStringExtra("movieUri");
             movieUri = Uri.parse(uri_str);
         }
+        MediaItem media = MediaItem.fromUri(movieUri);
+        exoPlayer.setMediaItem(media);
+        exoPlayer.prepare();
+        exoPlayer.play();
 
-        exo_floating_widget.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                exoPlayer.setPlayWhenReady(false);
-                exoPlayer.release();
-                Intent serviceIntent = new Intent(MoviePlayerActivity.this,
-                        FloatingWidgetService.class);
-                serviceIntent.putExtra("videoUri", movieUri.toString());
-                startService(serviceIntent);
+    }
+
+    private final Runnable updateProgressAction = new Runnable() {
+        @Override
+        public void run() {
+            onProgress();
+        }
+    };
+
+    private void onProgress () {
+        ExoPlayer player = exoPlayer;
+        long position = player == null ? 0 : player.getContentPosition();
+        handler.removeCallbacks(updateProgressAction);
+        int playbackState = player == null ? Player.STATE_IDLE : player.getPlaybackState();
+
+        if (playbackState != Player.STATE_IDLE && playbackState != Player.STATE_ENDED) {
+            long delayMs;
+            if (player.getPlayWhenReady() && playbackState == Player.STATE_READY) {
+                delayMs = 1000 - position % 1000;
+                if (delayMs < 200) {
+                    delayMs += 1000;
+                }
+            } else {
+                delayMs = 1000;
             }
-        });
-
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelector trackSelector = new DefaultTrackSelector
-                (new AdaptiveTrackSelection.Factory(bandwidthMeter));
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(this,trackSelector);
-        extractorsFactory = new DefaultExtractorsFactory();
-        playVideo();
-
-    }
-
-    private void hideActionBar() {
-
-        getSupportActionBar().hide();
-    }
-
-    private void setFullScreen() {
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-    }
-
-    private void playVideo(){
-
-        try {
-            String playerInfo = Util.getUserAgent(this,"MovieAppClient");
-            DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(this,playerInfo);
-            MediaSource mediaSource = new ExtractorMediaSource(
-                    movieUri,dataSourceFactory,extractorsFactory,null,null);
-
-            playerView.setPlayer(exoPlayer);
-            exoPlayer.prepare(mediaSource);
-            exoPlayer.setPlayWhenReady(true);
-
-
-        }catch (Exception e){
-            e.printStackTrace();
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        exoPlayer.setPlayWhenReady(false);
+        exoPlayer.pause();
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        exoPlayer.setPlayWhenReady(false);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            bt_fullscreen.performClick();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        exoPlayer.stop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         exoPlayer.release();
     }
 }

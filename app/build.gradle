@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:21.0.8'
     implementation 'com.google.firebase:firebase-database:20.0.6'
     // ExoPlayer
-//    implementation 'com.google.android.exoplayer:exoplayer:2.9.6'
+    implementation 'com.google.android.exoplayer:exoplayer:2.17.1'
     // Glide Library
     implementation 'com.github.bumptech.glide:glide:4.14.2'
     implementation 'androidx.mediarouter:mediarouter:1.2.5'
@@ -51,9 +51,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-fragment:2.4.1'
     implementation 'androidx.navigation:navigation-ui:2.4.1'
-    implementation 'com.google.android.exoplayer:exoplayer:2.17.1'
-    implementation files('libs/exoplayer-core-2.9.6.aar')
-    implementation files('libs/exoplayer-ui-2.9.6.aar')
     annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

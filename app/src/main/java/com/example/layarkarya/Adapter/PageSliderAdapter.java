@@ -1,6 +1,7 @@
 package com.example.layarkarya.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
 import com.example.layarkarya.Model.MovieDetails;
+import com.example.layarkarya.MoviePlayerActivity;
 import com.example.layarkarya.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.squareup.picasso.Callback;
@@ -45,7 +47,10 @@ public class PageSliderAdapter extends PagerAdapter {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    //
+                String video_url =  mList.get(position).getMovie_url();
+                Intent intent = new Intent(mContext , MoviePlayerActivity.class);
+                intent.putExtra("movieUri",video_url);
+                mContext.startActivity(intent);
             }
         });
         container.addView(slideLayout);
@@ -67,8 +72,4 @@ public class PageSliderAdapter extends PagerAdapter {
         container.removeView((View)object);
     }
 
-    @Override
-    public int getItemPosition(Object object) {
-        return POSITION_NONE;
-    }
 }

@@ -29,7 +29,6 @@ public class MoviePlayerActivity extends AppCompatActivity {
     public ImageView bt_fullscreen;
     public boolean isFullScreen = false;
     public Handler handler;
-    public View exoController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +38,7 @@ public class MoviePlayerActivity extends AppCompatActivity {
 
         playerView = findViewById(R.id.player);
         ProgressBar progressBar = findViewById(R.id.progress_bar);
-        exoController = LayoutInflater.from(this).inflate(R.layout.custom_controller, null);
-        bt_fullscreen = (ImageView) exoController.findViewById(R.id.bt_fullscreen);
+        bt_fullscreen = playerView.findViewById(R.id.bt_fullscreen);
 
         bt_fullscreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,4 +143,5 @@ public class MoviePlayerActivity extends AppCompatActivity {
         super.onDestroy();
         exoPlayer.release();
     }
+
 }

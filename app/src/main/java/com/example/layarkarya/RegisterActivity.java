@@ -35,6 +35,8 @@ public class RegisterActivity extends AppCompatActivity {
     public ImageView toolbarBtn;
     public DatabaseReference dbReference;
 
+    public int baseCoin = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
         String firstName = etFirstName.getText().toString();
         String lastName = etLastName.getText().toString();
         String password = etRegPassword.getText().toString();
+        int coin = baseCoin;
 
         if (TextUtils.isEmpty(email)){
             etRegEmail.setError("Email cannot be empty!");
@@ -95,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
-                        UserModel user = new UserModel(firstName, lastName, email);
+                        UserModel user = new UserModel(firstName, lastName, email, coin);
                         FirebaseDatabase.getInstance("https://layarkarya-65957-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                         .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override

@@ -8,8 +8,9 @@ public class MovieDetails {
     public String movie_name;
     public String movie_description;
     public String movie_category;
+    public String uploader_id;
 
-    public MovieDetails(String movie_slide, String movie_type, String movie_thumbnail, String movie_url, String movie_name, String movie_description, String movie_category) {
+    public MovieDetails(String movie_slide, String movie_type, String movie_thumbnail, String movie_url, String movie_name, String movie_description, String movie_category, String uploader_id) {
         this.movie_slide = movie_slide;
         this.movie_type = movie_type;
         this.movie_thumbnail = movie_thumbnail;
@@ -17,6 +18,7 @@ public class MovieDetails {
         this.movie_name = movie_name;
         this.movie_description = movie_description;
         this.movie_category = movie_category;
+        this.uploader_id = uploader_id;
     }
 
     public MovieDetails() {
@@ -77,5 +79,13 @@ public class MovieDetails {
 
     public void setMovie_category(String movie_category) {
         this.movie_category = movie_category;
+    }
+
+    public String getUploader_id() {
+        return uploader_id;
+    }
+
+    public void setUploader_id(String uploader_id) {
+        this.uploader_id = uploader_id;
     }
 }

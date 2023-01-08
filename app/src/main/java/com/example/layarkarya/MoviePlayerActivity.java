@@ -27,6 +27,7 @@ public class MoviePlayerActivity extends AppCompatActivity {
     public PlayerView playerView;
     public ExoPlayer exoPlayer;
     public ImageView bt_fullscreen;
+    public ImageView btnClose;
     public boolean isFullScreen = false;
     public Handler handler;
 
@@ -39,6 +40,7 @@ public class MoviePlayerActivity extends AppCompatActivity {
         playerView = findViewById(R.id.player);
         ProgressBar progressBar = findViewById(R.id.progress_bar);
         bt_fullscreen = playerView.findViewById(R.id.bt_fullscreen);
+        btnClose = playerView.findViewById(R.id.exo_close);
 
         bt_fullscreen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,6 +53,13 @@ public class MoviePlayerActivity extends AppCompatActivity {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 }
                 isFullScreen = !isFullScreen;
+            }
+        });
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MoviePlayerActivity.this.finish();
             }
         });
 

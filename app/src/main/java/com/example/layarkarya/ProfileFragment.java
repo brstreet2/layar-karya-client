@@ -28,7 +28,8 @@ public class ProfileFragment extends Fragment {
     private TextView displayName;
     private View profileFragment;
     private DatabaseReference databaseReference;
-    private String uid;
+    private TextView coinDisplay;
+    private TextView displayEmail;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -76,8 +77,12 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         profileFragment = inflater.inflate(R.layout.fragment_profile, container, false);
         displayName = profileFragment.findViewById(R.id.displayName);
+        coinDisplay = profileFragment.findViewById(R.id.coinWealth);
+        displayEmail = profileFragment.findViewById(R.id.displayEmail);
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
+        displayEmail.setText(user.getEmail());
 
         databaseReference = FirebaseDatabase.getInstance("https://layarkarya-65957-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
                 .child(user.getUid());
@@ -87,6 +92,9 @@ public class ProfileFragment extends Fragment {
                 String firstName = dataSnapshot.child("fullName").getValue(String.class);
                 String lastName = dataSnapshot.child("lastName").getValue(String.class);
                 displayName.setText(firstName + " " + lastName);
+                int cointWealth = dataSnapshot.child("coin").getValue(int.class);
+                coinDisplay.setText(String.valueOf(cointWealth));
+
             }
 
             @Override

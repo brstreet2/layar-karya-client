@@ -85,6 +85,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/coinWealth"
                             android:text="1205"
                             android:textStyle="bold"
                             android:textSize="20sp"
@@ -137,6 +138,7 @@
                     app:tint="@color/white"
                     android:src="@drawable/ic_baseline_email_24"/>
                 <TextView
+                    android:id="@+id/displayEmail"
                     android:textStyle="bold"
                     android:layout_gravity="center_vertical"
                     android:layout_width="wrap_content"

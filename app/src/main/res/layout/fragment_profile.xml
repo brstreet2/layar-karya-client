@@ -43,7 +43,7 @@
                 android:layout_height="120dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="275dp"
-                app:cardBackgroundColor="@color/blue_primary">
+                app:cardBackgroundColor="@color/white">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

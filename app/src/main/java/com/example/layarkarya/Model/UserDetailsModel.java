@@ -3,6 +3,16 @@ package com.example.layarkarya.Model;
 public class UserDetailsModel {
     public String phone;
 
+    public String getAva_url() {
+        return ava_url;
+    }
+
+    public void setAva_url(String ava_url) {
+        this.ava_url = ava_url;
+    }
+
+    public String ava_url;
+
     public String getPhone() {
         return phone;
     }
@@ -42,11 +52,12 @@ public class UserDetailsModel {
 
     }
 
-    public UserDetailsModel(String phone, String address, String city, String province) {
+    public UserDetailsModel(String phone, String address, String city, String province, String ava_url) {
         this.phone = phone;
         this.address = address;
         this.city = city;
         this.province = province;
+        this.ava_url = ava_url;
     }
 
     public String province;

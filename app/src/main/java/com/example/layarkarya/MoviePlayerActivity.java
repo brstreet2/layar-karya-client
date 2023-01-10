@@ -1,5 +1,6 @@
 package com.example.layarkarya;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -19,6 +20,16 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.UploadTask;
 
 
 public class MoviePlayerActivity extends AppCompatActivity {
@@ -30,6 +41,10 @@ public class MoviePlayerActivity extends AppCompatActivity {
     public ImageView btnClose;
     public boolean isFullScreen = false;
     public Handler handler;
+    private DatabaseReference databaseReference;
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
+    private int coinWealth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +68,25 @@ public class MoviePlayerActivity extends AppCompatActivity {
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 }
                 isFullScreen = !isFullScreen;
+            }
+        });
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        database.getInstance("https://layarkarya-65957-default-rtdb.asia-southeast1.firebasedatabase.app");
+
+        databaseReference = FirebaseDatabase.getInstance("https://layarkarya-65957-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
+                .child(user.getUid());
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                coinWealth = dataSnapshot.child("coin").getValue(int.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 

@@ -170,7 +170,11 @@ public class ProfileFragment extends Fragment {
 
                 userAvaUrl = dataSnapshot.child("ava_url").getValue(String.class);
 
-                Picasso.get().load(userAvaUrl).into(userAva);
+                if (userAvaUrl.equals("")) {
+                    userAva.setImageResource(R.drawable.ic_baseline_account_circle_24);
+                } else {
+                    Picasso.get().load(userAvaUrl).into(userAva);
+                }
             }
 
             @Override

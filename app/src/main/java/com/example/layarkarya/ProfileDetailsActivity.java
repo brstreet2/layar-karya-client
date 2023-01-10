@@ -66,7 +66,7 @@ public class ProfileDetailsActivity extends AppCompatActivity {
             textProvince.setError("Province cannot be empty!");
             textProvince.requestFocus();
         } else {
-            UserDetailsModel userDetailsModel = new UserDetailsModel(phone, address, city, province);
+            UserDetailsModel userDetailsModel = new UserDetailsModel(phone, address, city, province, "");
             FirebaseDatabase.getInstance("https://layarkarya-65957-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("user_details").child(currentId)
                     .setValue(userDetailsModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

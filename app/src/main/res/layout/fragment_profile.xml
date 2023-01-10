@@ -29,6 +29,28 @@
                     android:layout_marginTop="45dp"
                     android:src="@drawable/ic_baseline_account_circle_24"
                     app:shapeAppearanceOverlay="@style/roundedImageViewRounded"/>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/uploadPictureText"
+                    android:layout_width="34dp"
+                    android:layout_height="24dp"
+                    app:cardCornerRadius="10dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="Upload"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:textSize="8sp"
+                        android:textColor="@color/blue_lk_logo"
+                        android:background="@color/white"/>
+
+                </androidx.cardview.widget.CardView>
+
                 <TextView
                     android:id="@+id/displayName"
                     android:layout_marginTop="10dp"

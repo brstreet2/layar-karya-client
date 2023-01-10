@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +32,7 @@ public class ProfileFragment extends Fragment {
     private View profileFragment;
     private DatabaseReference databaseReference;
     private TextView displayName, coinDisplay, displayEmail, contentCountDisplay, movieWatchedDisplay, displayPhone, displayLocation;
+    private ShapeableImageView userAva;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -84,7 +86,7 @@ public class ProfileFragment extends Fragment {
         displayLocation = profileFragment.findViewById(R.id.locationDisplay);
         contentCountDisplay = profileFragment.findViewById(R.id.contentCountDisplay);
         movieWatchedDisplay = profileFragment.findViewById(R.id.movieWatchDisplay);
-
+        userAva = profileFragment.findViewById(R.id.userAva);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         displayEmail.setText(user.getEmail());

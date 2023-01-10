@@ -4,10 +4,13 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,10 +28,9 @@ import com.google.firebase.database.ValueEventListener;
  */
 public class ProfileFragment extends Fragment {
     public FirebaseAuth mAuth;
-    private TextView displayName;
     private View profileFragment;
     private DatabaseReference databaseReference;
-    private TextView coinDisplay, displayEmail, contentCountDisplay, movieWatchedDisplay;
+    private TextView displayName, coinDisplay, displayEmail, contentCountDisplay, movieWatchedDisplay, displayPhone, displayLocation;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -78,6 +80,8 @@ public class ProfileFragment extends Fragment {
         displayName = profileFragment.findViewById(R.id.displayName);
         coinDisplay = profileFragment.findViewById(R.id.coinWealth);
         displayEmail = profileFragment.findViewById(R.id.displayEmail);
+        displayPhone = profileFragment.findViewById(R.id.phoneDisplay);
+        displayLocation = profileFragment.findViewById(R.id.locationDisplay);
         contentCountDisplay = profileFragment.findViewById(R.id.contentCountDisplay);
         movieWatchedDisplay = profileFragment.findViewById(R.id.movieWatchDisplay);
 
@@ -103,6 +107,26 @@ public class ProfileFragment extends Fragment {
                 int movieWatchedCount = dataSnapshot.child("movieWatched").getValue(int.class);
                 movieWatchedDisplay.setText(String.valueOf(movieWatchedCount));
 
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        databaseReference = FirebaseDatabase.getInstance("https://layarkarya-65957-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("user_details")
+                .child(user.getUid());
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String phone = dataSnapshot.child("phone").getValue(String.class);
+                displayPhone.setText(phone);
+
+                String location = dataSnapshot.child("address").getValue(String.class) + ", "
+                        + dataSnapshot.child("city").getValue(String.class) + ", "
+                        + dataSnapshot.child("province").getValue(String.class);
+                displayLocation.setText(location);
             }
 
             @Override

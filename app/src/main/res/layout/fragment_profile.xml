@@ -165,6 +165,7 @@
                     app:tint="@color/white"
                     android:src="@drawable/ic_baseline_phone"/>
                 <TextView
+                    android:id="@+id/phoneDisplay"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:layout_gravity="center_vertical"
@@ -185,6 +186,7 @@
                     app:tint="@color/white"
                     android:src="@drawable/ic_baseline_location_on_24"/>
                 <TextView
+                    android:id="@+id/locationDisplay"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:layout_gravity="center_vertical"
@@ -193,26 +195,7 @@
                     android:paddingLeft="20dp"
                     android:text="Location"/>
             </LinearLayout>
-            <LinearLayout
-                android:layout_marginTop="25dp"
-                android:orientation="horizontal"
-                android:paddingLeft="25dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    app:tint="@color/white"
-                    android:src="@drawable/ic_baseline_arrow_back_24"/>
-                <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:text="Show all comments"/>
-            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

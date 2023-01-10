@@ -44,7 +44,8 @@ public class MoviePlayerActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
-    private int coinWealth;
+    private int movieCount;
+    public static int count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,8 @@ public class MoviePlayerActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                coinWealth = dataSnapshot.child("coin").getValue(int.class);
+                movieCount = dataSnapshot.child("movieWatched").getValue(int.class);
+                count = movieCount + 1;
             }
 
             @Override
@@ -89,6 +91,20 @@ public class MoviePlayerActivity extends AppCompatActivity {
 
             }
         });
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dataSnapshot.getRef().child("movieWatched").setValue(count);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
 
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override

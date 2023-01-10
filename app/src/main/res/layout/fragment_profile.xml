@@ -42,7 +42,8 @@
                 android:layout_width="400dp"
                 android:layout_height="120dp"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="275dp">
+                android:layout_marginTop="275dp"
+                app:cardBackgroundColor="@color/blue_primary">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -58,9 +59,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Content"
-                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
                             />
                         <TextView
+                            android:id="@+id/contentCountDisplay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="125"
@@ -80,7 +83,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Coin"
-                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
                             />
                         <TextView
                             android:layout_width="wrap_content"
@@ -102,10 +106,12 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Following"
-                            android:textSize="20sp"
+                            android:text="Movie Watched"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
                             />
                         <TextView
+                            android:id="@+id/movieWatchDisplay"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="360"

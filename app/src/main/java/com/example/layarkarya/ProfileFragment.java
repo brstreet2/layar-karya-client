@@ -28,8 +28,7 @@ public class ProfileFragment extends Fragment {
     private TextView displayName;
     private View profileFragment;
     private DatabaseReference databaseReference;
-    private TextView coinDisplay;
-    private TextView displayEmail;
+    private TextView coinDisplay, displayEmail, contentCountDisplay, movieWatchedDisplay;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -79,6 +78,8 @@ public class ProfileFragment extends Fragment {
         displayName = profileFragment.findViewById(R.id.displayName);
         coinDisplay = profileFragment.findViewById(R.id.coinWealth);
         displayEmail = profileFragment.findViewById(R.id.displayEmail);
+        contentCountDisplay = profileFragment.findViewById(R.id.contentCountDisplay);
+        movieWatchedDisplay = profileFragment.findViewById(R.id.movieWatchDisplay);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -92,8 +93,15 @@ public class ProfileFragment extends Fragment {
                 String firstName = dataSnapshot.child("fullName").getValue(String.class);
                 String lastName = dataSnapshot.child("lastName").getValue(String.class);
                 displayName.setText(firstName + " " + lastName);
-                int cointWealth = dataSnapshot.child("coin").getValue(int.class);
-                coinDisplay.setText(String.valueOf(cointWealth));
+
+                int coinWealth = dataSnapshot.child("coin").getValue(int.class);
+                coinDisplay.setText(String.valueOf(coinWealth));
+
+                int contentCount = dataSnapshot.child("contentCount").getValue(int.class);
+                contentCountDisplay.setText(String.valueOf(contentCount));
+
+                int movieWatchedCount = dataSnapshot.child("movieWatched").getValue(int.class);
+                movieWatchedDisplay.setText(String.valueOf(movieWatchedCount));
 
             }
 

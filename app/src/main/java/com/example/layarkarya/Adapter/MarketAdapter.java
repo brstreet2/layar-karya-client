@@ -17,12 +17,22 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.layarkarya.Model.ProductModel;
 import com.example.layarkarya.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder> {
+    private DatabaseReference databaseReference;
+    private FirebaseAuth mAuth;
+    private int currCoin;
     public MarketAdapter(Context context, ArrayList<ProductModel> product) {
         this.context = context;
         this.product = product;
@@ -67,6 +77,60 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                mAuth = FirebaseAuth.getInstance();
+                                databaseReference = FirebaseDatabase.getInstance("https://layarkarya-65957-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
+                                        .child(mAuth.getCurrentUser().getUid());
+                                databaseReference.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                currCoin = dataSnapshot.child("coin").getValue(int.class);
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
+                                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                int calc = (currCoin - product.get(position).getProduct_price());
+                                                final int calcResult = calc;
+                                                if (calcResult < 0) {
+                                                    new AlertDialog.Builder(context)
+                                                            .setTitle("Purchase Failed")
+                                                            .setMessage("Sorry, you don't have enough coin!")
+                                                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                                }
+                                                            })
+                                                            .show();
+                                                } else {
+                                                    dataSnapshot.getRef().child("coin").setValue(calcResult).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+                                                            new AlertDialog.Builder(context)
+                                                                    .setTitle("Purchase Success")
+                                                                    .setMessage("Your code is: " + product.get(position).getProduct_item())
+                                                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                                        }
+                                                                    })
+                                                                    .show();
+                                                        }
+                                                    });
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+                                        });
 
                             }
                         }).setNegativeButton("No", null)

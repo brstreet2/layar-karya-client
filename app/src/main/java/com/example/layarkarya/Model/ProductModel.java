@@ -7,6 +7,16 @@ public class ProductModel {
         return product_img;
     }
 
+    public String getProduct_item() {
+        return product_item;
+    }
+
+    public void setProduct_item(String product_item) {
+        this.product_item = product_item;
+    }
+
+    public String product_item;
+
     public void setProduct_img(String product_img) {
         this.product_img = product_img;
     }
@@ -48,12 +58,13 @@ public class ProductModel {
 
     }
 
-    public ProductModel(String product_name, String product_description, int product_price, int product_stock, String product_img) {
+    public ProductModel(String product_name, String product_description, int product_price, int product_stock, String product_img, String product_item) {
         this.product_name = product_name;
         this.product_description = product_description;
         this.product_price = product_price;
         this.product_stock = product_stock;
         this.product_img = product_img;
+        this.product_item = product_item;
     }
 
     public int product_price, product_stock;

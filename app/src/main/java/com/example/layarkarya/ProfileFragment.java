@@ -26,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.OnProgressListener;
@@ -46,6 +45,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.UUID;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ProfileFragment#newInstance} factory method to
@@ -56,7 +57,7 @@ public class ProfileFragment extends Fragment {
     private View profileFragment;
     private DatabaseReference databaseReference;
     private TextView displayName, coinDisplay, displayEmail, contentCountDisplay, movieWatchedDisplay, displayPhone, displayLocation;
-    private ShapeableImageView userAva;
+    private CircleImageView userAva;
     private Uri avaUri;
     private StorageReference storageReference;
     private StorageReference storageAva;

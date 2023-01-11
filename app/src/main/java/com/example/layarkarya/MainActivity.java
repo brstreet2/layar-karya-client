@@ -19,12 +19,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public FirebaseAuth mAuth;
     public ProgressDialog progressDialog;
     private DrawerLayout drawerLayout;
+    public static Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -59,10 +60,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.nav_discover:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DiscoverFragment()).commit();
+                toolbar.setTitle(getString(R.string.discover));
                 break;
 
             case R.id.nav_account:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+                toolbar.setTitle(getString(R.string.my_profile));
                 break;
 
             case R.id.nav_upload:
@@ -70,7 +73,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_market:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MarketFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MarketFragment()).commit();
+                toolbar.setTitle(getString(R.string.marketplace));
                 break;
 
             case R.id.nav_logout:

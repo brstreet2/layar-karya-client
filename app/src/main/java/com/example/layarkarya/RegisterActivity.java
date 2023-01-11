@@ -100,22 +100,30 @@ public class RegisterActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
-                        UserModel user = new UserModel(firstName, lastName, email, coin, contentCount, movieWatched);
-                        FirebaseDatabase.getInstance("https://layarkarya-65957-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                        .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful()){
-                                            Toast.makeText(RegisterActivity.this, "User registered successfully", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(RegisterActivity.this, ProfileDetailsActivity.class);
-                                            intent.putExtra("currentId", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                                            startActivity(intent);
-                                        }
-                                        else{
-                                            Toast.makeText(RegisterActivity.this, "Registration Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
+                        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    UserModel user = new UserModel(firstName, lastName, email, coin, contentCount, movieWatched);
+                                    FirebaseDatabase.getInstance("https://layarkarya-65957-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                            .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if(task.isSuccessful()){
+                                                        Toast.makeText(RegisterActivity.this, "User registered successfully, an email has been sent to your email address", Toast.LENGTH_SHORT).show();
+                                                        Intent intent = new Intent(RegisterActivity.this, ProfileDetailsActivity.class);
+                                                        intent.putExtra("currentId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                                        startActivity(intent);
+                                                    }
+                                                    else{
+                                                        Toast.makeText(RegisterActivity.this, "Registration Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                }
+                            }
+                        });
+
                     }else{
                         Toast.makeText(RegisterActivity.this, "Registration Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }

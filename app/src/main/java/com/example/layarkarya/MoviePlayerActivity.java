@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
@@ -32,6 +33,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
 import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -60,6 +62,7 @@ public class MoviePlayerActivity extends AppCompatActivity {
     public RewardedInterstitialAd rewardedInterstitialAd;
     public long ad = 4000;
     private boolean check = false;
+    public int currCoin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,6 +197,7 @@ public class MoviePlayerActivity extends AppCompatActivity {
                 check = true;
                 initAdvertisement();
             }
+            initAdvertisement();
         }
     }
 
@@ -202,7 +206,7 @@ public class MoviePlayerActivity extends AppCompatActivity {
             return;
         } else {
             MobileAds.initialize(this);
-            rewardedInterstitialAd.load(this, "ca-app-pub-3773114619466895/7456324783", new AdRequest.Builder()
+            rewardedInterstitialAd.load(this, "ca-app-pub-3940256099942544/5354046379", new AdRequest.Builder()
                     .build(), new RewardedInterstitialAdLoadCallback() {
 
                 @Override
@@ -240,7 +244,39 @@ public class MoviePlayerActivity extends AppCompatActivity {
                         public void onFinish() {
                             sec_ad_countdown.setVisibility(View.GONE);
                             rewardedInterstitialAd.show(MoviePlayerActivity.this, rewardItem -> {
+                                databaseReference = FirebaseDatabase.getInstance("https://layarkarya-65957-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
+                                        .child(mAuth.getCurrentUser().getUid());
+                                databaseReference.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        currCoin = dataSnapshot.child("coin").getValue(int.class);
+                                    }
 
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        int calculation = currCoin + 10;
+                                        final int balanceRes = calculation;
+
+                                        dataSnapshot.getRef().child("coin").setValue(balanceRes).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Toast.makeText(getBaseContext(), "10 coin has been added to your account!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
                             });
                         }
                     }.start();
@@ -249,6 +285,7 @@ public class MoviePlayerActivity extends AppCompatActivity {
                 @Override
                 public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                     rewardedInterstitialAd = null;
+                    Log.d("ADD_ERROR", loadAdError.toString());
                 }
             });
         }

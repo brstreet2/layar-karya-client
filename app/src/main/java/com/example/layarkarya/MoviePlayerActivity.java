@@ -9,17 +9,28 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.gms.ads.AdError;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAd;
+import com.google.android.gms.ads.rewardedinterstitial.RewardedInterstitialAdLoadCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,6 +57,9 @@ public class MoviePlayerActivity extends AppCompatActivity {
     private FirebaseDatabase database;
     private int movieCount;
     public static int count;
+    public RewardedInterstitialAd rewardedInterstitialAd;
+    public long ad = 4000;
+    private boolean check = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +85,8 @@ public class MoviePlayerActivity extends AppCompatActivity {
                 isFullScreen = !isFullScreen;
             }
         });
+
+        rewardedInterstitialAd = null;
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -173,6 +189,68 @@ public class MoviePlayerActivity extends AppCompatActivity {
             } else {
                 delayMs = 1000;
             }
+
+            if ((ad - 3000 <= position && position <= ad) && !check) {
+                check = true;
+                initAdvertisement();
+            }
+        }
+    }
+
+    private void initAdvertisement() {
+        if (rewardedInterstitialAd != null) {
+            return;
+        } else {
+            MobileAds.initialize(this);
+            rewardedInterstitialAd.load(this, "ca-app-pub-3773114619466895/7456324783", new AdRequest.Builder()
+                    .build(), new RewardedInterstitialAdLoadCallback() {
+
+                @Override
+                public void onAdLoaded(@NonNull RewardedInterstitialAd p0) {
+                    rewardedInterstitialAd = p0;
+                    rewardedInterstitialAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                        @Override
+                        public void onAdDismissedFullScreenContent() {
+                            exoPlayer.setPlayWhenReady(true);
+                            rewardedInterstitialAd = null;
+                            check = false;
+                        }
+
+                        @Override
+                        public void onAdFailedToShowFullScreenContent(@NonNull AdError adError) {
+                            Log.d("MoviePlayerActivity: ", adError.getMessage());
+                        }
+
+                        @Override
+                        public void onAdShowedFullScreenContent() {
+                            handler.removeCallbacks(updateProgressAction);
+                        }
+                    });
+                    LinearLayout sec_ad_countdown = findViewById(R.id.sect_ad_countdown);
+                    TextView tx_ad_countdown = findViewById(R.id.tx_ad_countdown);
+                    sec_ad_countdown.setVisibility(View.VISIBLE);
+                    new CountDownTimer(4000, 1000) {
+
+                        @Override
+                        public void onTick(long l) {
+                            tx_ad_countdown.setText("Ad in " + l/1000);
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            sec_ad_countdown.setVisibility(View.GONE);
+                            rewardedInterstitialAd.show(MoviePlayerActivity.this, rewardItem -> {
+
+                            });
+                        }
+                    }.start();
+                }
+
+                @Override
+                public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+                    rewardedInterstitialAd = null;
+                }
+            });
         }
     }
 

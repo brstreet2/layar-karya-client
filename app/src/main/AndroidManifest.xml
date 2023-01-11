@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LayarKarya"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3773114619466895~7456324783"/>
         <activity
             android:name=".ProfileDetailsActivity"
             android:exported="false">

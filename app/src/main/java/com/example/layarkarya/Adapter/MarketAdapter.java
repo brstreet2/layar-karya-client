@@ -1,5 +1,6 @@
 package com.example.layarkarya.Adapter;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -52,7 +53,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MarketAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MarketAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.productTitle.setText(product.get(position).getProduct_name());
         holder.productDesc.setText(product.get(position).getProduct_description());
         holder.productPrice.setText(String.valueOf(product.get(position).getProduct_price()));
@@ -72,6 +73,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder
             @Override
             public void onClick(View view) {
                 new AlertDialog.Builder(context)
+                        .setIcon(R.drawable.ic_baseline_local_grocery_store_24)
                         .setTitle("Purchase Confirmation")
                         .setMessage("Purchase this item for " + String.valueOf(product.get(position).getProduct_price()) + " coin?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -98,6 +100,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder
                                                 final int calcResult = calc;
                                                 if (calcResult < 0) {
                                                     new AlertDialog.Builder(context)
+                                                            .setIcon(R.drawable.ic_baseline_warning_amber_24)
                                                             .setTitle("Purchase Failed")
                                                             .setMessage("Sorry, you don't have enough coin!")
                                                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -112,6 +115,7 @@ public class MarketAdapter extends RecyclerView.Adapter<MarketAdapter.ViewHolder
                                                         @Override
                                                         public void onSuccess(Void unused) {
                                                             new AlertDialog.Builder(context)
+                                                                    .setIcon(R.drawable.ic_baseline_check_24)
                                                                     .setTitle("Purchase Success")
                                                                     .setMessage("Your code is: " + product.get(position).getProduct_item())
                                                                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {

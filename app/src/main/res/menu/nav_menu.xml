@@ -22,10 +22,10 @@
             android:icon="@drawable/ic_baseline_store"
             android:title="Market"/>
 
-        <item
-            android:id="@+id/nav_upload"
-            android:icon="@drawable/ic_baseline_upload_file_24"
-            android:title="Upload Content"/>
+<!--        <item-->
+<!--            android:id="@+id/nav_upload"-->
+<!--            android:icon="@drawable/ic_baseline_upload_file_24"-->
+<!--            android:title="Upload Content"/>-->
     </group>
     <item
         android:title=""

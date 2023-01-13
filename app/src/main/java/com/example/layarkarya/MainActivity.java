@@ -71,9 +71,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 toolbar.setTitle(getString(R.string.my_profile));
                 break;
 
-            case R.id.nav_upload:
+//            case R.id.nav_upload:
 //                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UploadMovieFragment()).commit();
-                break;
+//                break;
 
             case R.id.nav_market:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MarketFragment()).commit();

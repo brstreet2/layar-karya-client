@@ -178,7 +178,7 @@ public class MoviePlayerActivity extends AppCompatActivity {
 
     private void onProgress () {
         ExoPlayer player = exoPlayer;
-        long position = player == null ? 0 : player.getContentPosition();
+        long position = player == null ? 0 : player.getCurrentPosition();
         handler.removeCallbacks(updateProgressAction);
         int playbackState = player == null ? Player.STATE_IDLE : player.getPlaybackState();
 
@@ -197,7 +197,7 @@ public class MoviePlayerActivity extends AppCompatActivity {
                 check = true;
                 initAdvertisement();
             }
-            initAdvertisement();
+            handler.postDelayed(updateProgressAction, delayMs);
         }
     }
 
